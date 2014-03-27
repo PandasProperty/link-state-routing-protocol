@@ -1,0 +1,37 @@
+Simulatorul central: simulator.c
+
+Codul unui ruter:  ruter.c
+
+
+compilare: make
+rulare: make run
+
+Atentie! Cele 10 procese ruter sunt create si rulate cu fork si exec (vezi main() din simulator.c). Nu trebuie sa rulati explict ./ruter!
+
+NU AVETI VOIE SA MODIFICATI fisierele simulator.c si helpers.h! Codul sursa al acestor 2 fisiere vi s-a pus la dispozitie pentru intelegerea mai buna a schimburilor de mesaje si pentru a evita probleme la compilare (platforme de 64/32). Nu va speriati daca nu intelegeti functia main din simulator.c sau parti din functia simulare() care tin de mediul de comunicatie. Important e codul din switch dupa tipul mesajului, pentru mesajele 1-4 si 7(pentru lucrul cu evenimente, aveti indicate liniile din simulator.c de unde sa obtineti lamuriri). 
+
+Daca modificati simulator.c sau helpers.h, o faceti pe riscul vostru. Tema va fi corectata cu sursele acestor fisiere care insotesc enuntul temei.
+
+Puteti scrie partea de ruter (ruter.c) si in C++; trebuie sa modificati corespunzator extensia fisierului(.cpp) si comanda de compilare(g++) pentru targetul ruter din Makefile.
+
+Aveti voie sa creati orice alte fisiere credeti de cuviinta, dar trebuie sa editati Makefile-ul, daca e nevoie, ca sa nu pierdeti functionalitatea de compilare/rulare corecta.
+
+TREBUIE SA MODIFICATI ruter.c
+Daca vreti sa folositi un .h si pentru ruter.c, creati-va altul.
+
+S-au folosit pipe-uri ca mecanisme de comunicatie. Ele sunt deja create si exista si cod pentru inchiderea lor dupa ce se termina simularea. Voi trebuie doar sa lucrati cu ele folosind un api identic cu cel de scriere/citire in/din fisiere:
+
+read(in, &mesaj, sizeof(msg))  (codul contine deja toate instructiunile de primire a unui mesaj)
+write(out, &mesaj, sizeof(msg))  
+
+Unde in si out sunt legaturile cu care se comunica cu simulatorul central. 
+
+Exemplu:
+
+Ca sa trimiteti un mesaj (tip 1-4) de la ruterul A la ruterul B, din codul (ruter.c) ruterului A se trimite procesului central un mesaj avand campul next_hop =B (trebuie sa apelati write(out, &mesaj, sizeof(msg))). Apoi ruterului central va trimite, pe baza campului next_hop, mesajul respectiv la ruterul B (asta e deja implementat).
+
+
+
+
+
+
